@@ -67,14 +67,14 @@ class MyHeap:
     print(lvl)
     print('##'*row1)
   def parent(self, index):
-    return index//2
+    return (index-1)//2
   def leftChild(self, index):
-    return index*2
-  def rightChild(self, index):
     return index*2+1
+  def rightChild(self, index):
+    return index*2+2
 
 H = MyHeap()
-for i in range(random.randint(11, 25)):
+for i in range(random.randint(1, 11)):
   H.add(random.randint(1, 191))
 print(H.heap)
 print(H.size)
