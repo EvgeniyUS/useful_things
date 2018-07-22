@@ -8,6 +8,11 @@ class MyHeap:
     self.heap.append(item)
     self.size += 1
     self.siftUp(self.size-1)
+  def makeHeap(self, l):
+    self.heap = l
+    self.size = len(l)
+    for i in reversed(range(0, self.size//2)):
+      self.siftDown(i)
   def siftUp(self, index):
     while index > 0 and self.heap[self.parent(index)] < self.heap[index]:
       self.heap[self.parent(index)], self.heap[index] = self.heap[index], self.heap[self.parent(index)]
@@ -74,12 +79,16 @@ class MyHeap:
     return index*2+2
 
 H = MyHeap()
-for i in range(random.randint(1, 11)):
-  H.add(random.randint(1, 191))
-print(H.heap)
-print(H.size)
-H.draw()
-H.extractTop()
-H.extractTop()
-H.extractTop()
+#for i in range(random.randint(1, 11)):
+#  H.add(random.randint(1, 191))
+#print(H.heap)
+#print(H.size)
+#H.draw()
+#H.extractTop()
+#H.extractTop()
+#H.extractTop()
+#H.draw()
+
+l = [5,2,4,55,1,2,9,7,555,99,98,78,76,565]
+H.makeHeap(l)
 H.draw()
