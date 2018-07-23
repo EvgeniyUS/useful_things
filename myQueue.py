@@ -1,26 +1,31 @@
 
 class MyQueue:
-  def __init__(self):
-    self.queue = []
-    self.lenght = 0
-  def add(self, value):
-    self.queue.append(value)
-    self.lenght += 1
-    return True
-  def get(self):
-    assert self.lenght > 0
-    if self.lenght > 0:
-      value = self.queue[0]
-      del self.queue[0]
-      self.lenght -= 1
-      return value
-    else:
-      return False
-  def clear(self):
-    self.queue.clear()
-    self.lenght = 0
-  def show(self):
-    return self.queue
+    def __init__(self):
+        self.queue = []
+        self.lenght = 0
+
+    def add(self, value):
+        self.queue.append(value)
+        self.lenght += 1
+        return True
+
+    def get(self):
+        assert self.lenght > 0
+        if self.lenght > 0:
+            value = self.queue[0]
+            del self.queue[0]
+            self.lenght -= 1
+            return value
+        else:
+            return False
+
+    def clear(self):
+        self.queue.clear()
+        self.lenght = 0
+
+    def show(self):
+        return self.queue
+
 
 Q = MyQueue()
 Q.add(1)

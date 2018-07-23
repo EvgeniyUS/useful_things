@@ -1,26 +1,31 @@
 
 class MyStack:
-  def __init__(self):
-    self.stack = []
-    self.lenght = 0
-  def add(self, value):
-    self.stack.append(value)
-    self.lenght += 1
-    return True
-  def get(self):
-    assert self.lenght > 0
-    if self.lenght > 0:
-      value = self.stack[-1]
-      del self.stack[-1]
-      self.lenght -= 1
-      return value
-    else:
-      return False
-  def clear(self):
-    self.stack.clear()
-    self.lenght = 0
-  def show(self):
-    return self.stack
+    def __init__(self):
+        self.stack = []
+        self.lenght = 0
+
+    def add(self, value):
+        self.stack.append(value)
+        self.lenght += 1
+        return True
+
+    def get(self):
+        assert self.lenght > 0
+        if self.lenght > 0:
+            value = self.stack[-1]
+            del self.stack[-1]
+            self.lenght -= 1
+            return value
+        else:
+            return False
+
+    def clear(self):
+        self.stack.clear()
+        self.lenght = 0
+
+    def show(self):
+        return self.stack
+
 
 Q = MyStack()
 Q.add(1)
