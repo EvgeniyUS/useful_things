@@ -94,16 +94,16 @@ class MyHeap:
 
 
 H = MyHeap()
-# for i in range(random.randint(1, 11)):
-#  H.add(random.randint(1, 191))
-# print(H.heap)
-# print(H.size)
-# H.draw()
-# H.extractTop()
-# H.extractTop()
-# H.extractTop()
-# H.draw()
-
-l = [5, 2, 4, 55, 1, 2, 9, 7, 555, 99, 98, 78, 76, 565]
-H.makeHeap(l)
+for i in range(random.randint(1, 11)):
+ H.add(random.randint(1, 191))
+print(H.heap)
+print(H.size)
 H.draw()
+H.extractTop()
+H.extractTop()
+H.extractTop()
+H.draw()
+
+#l = [5, 2, 4, 55, 1, 2, 9, 7, 555, 99, 98, 78, 76, 565]
+#H.makeHeap(l)
+#H.draw()
