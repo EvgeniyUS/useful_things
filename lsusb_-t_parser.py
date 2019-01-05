@@ -2,7 +2,7 @@ from pprint import pprint
 
 memo = dict()
 data = dict()
-for num, line in enumerate(open('source.txt', 'r')):
+for num, line in enumerate(open('lsusb_-t_source.txt', 'r')):
     line = line.replace('\n', '').split(' ')
     try:
         if line[0] == '/:':
