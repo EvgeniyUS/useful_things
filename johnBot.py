@@ -1,26 +1,39 @@
 # -*- coding: utf-8 -*-
 
+import json
+
+import apiai
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-import apiai, json
-updater = Updater(token='794660132:AAETmCoAhTHGyH6rU3VNxLpbDCkVRWp5YpM') # Токен бота телеги
+
+REQUEST_KWARGS = {'proxy_url': 'http://13.57.194.21:3128'}
+updater = Updater(token='794660132:AAETmCoAhTHGyH6rU3VNxLpbDCkVRWp5YpM', request_kwargs=REQUEST_KWARGS)  # Токен бота
 dispatcher = updater.dispatcher
+
+
 # Обработка команд
 def startCommand(bot, update):
-    print 'startCommand'
-    bot.send_message(chat_id=update.message.chat_id, text='Привет, как оно?')
+    bot.send_message(chat_id=update.message.chat_id, text='/Стоп')
+
+
 def textMessage(bot, update):
-    request = apiai.ApiAI('9feb6c005a5f4eda8966e58ae1525fb3').text_request() # Токен API к Dialogflow
-    request.lang = 'ru' # На каком языке будет послан запрос
-    request.session_id = 'JohnBot' # ID Сессии диалога (нужно, чтобы потом учить бота)
-    request.query = update.message.text # Посылаем запрос к ИИ с сообщением от юзера
-    responseJson = json.loads(request.getresponse().read().decode('utf-8'))
-    response = responseJson['result']['fulfillment']['speech'] # Разбираем JSON и вытаскиваем ответ
-    # Если есть ответ от бота - присылаем юзеру, если нет - бот его не понял
-    if response:
-        bot.send_message(chat_id=update.message.chat_id, text=response)
-    else:
-        bot.send_message(chat_id=update.message.chat_id, text='Не понял...')
-    print 'testMessageSended'
+    try:
+        request = apiai.ApiAI('84095557c4114b78aba506850602c83f').text_request()  # Токен API к Dialogflow
+        request.lang = 'ru'  # На каком языке будет послан запрос
+        request.session_id = 'JohnBot'  # ID Сессии диалога (нужно, чтобы потом учить бота)
+        request._time_zone = 'utc'
+        request.query = update.message.text
+        resp = request.getresponse().read().decode('utf-8')
+        responseJson = json.loads(resp)
+        response = responseJson['result']['fulfillment']['speech']  # Разбираем JSON и вытаскиваем ответ
+        # Если есть ответ от бота - присылаем юзеру, если нет - бот его не понял
+        if response:
+            bot.send_message(chat_id=update.message.chat_id, text=response)
+        else:
+            bot.send_message(chat_id=update.message.chat_id, text='Че?')
+    except Exception, e:
+        bot.send_message(chat_id=update.message.chat_id, text=e)
+
+
 # Хендлеры
 start_command_handler = CommandHandler('start', startCommand)
 text_message_handler = MessageHandler(Filters.text, textMessage)
