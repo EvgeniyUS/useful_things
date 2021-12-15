@@ -3,41 +3,45 @@ import time
 from timeThis import timeThis
 
 
-nums = []
-for i in range(10000): nums.append(random.randint(0, 1000))
+numbers = [random.randint(0, 1000) for i in range(10000)]
+
 
 @timeThis
-def bubbleSort(nums):
+def bubble_sort(values):
     n = 1
-    while n < len(nums):
-        for i in range(len(nums) - n):
-            if nums[i] > nums[i + 1]:
-                nums[i], nums[i + 1] = nums[i + 1], nums[i]
+    while n < len(values):
+        for i in range(len(values) - n):
+            if values[i] > values[i + 1]:
+                values[i], values[i + 1] = values[i + 1], values[i]
         n += 1
-    return nums
+    return values
 
-def quickSort(nums):
-   if len(nums) <= 1:
-       return nums
-   else:
-       q = random.choice(nums)
-       s_nums = []
-       m_nums = []
-       e_nums = []
-       for n in nums:
-           if n < q:
-               s_nums.append(n)
-           elif n > q:
-               m_nums.append(n)
-           else:
-               e_nums.append(n)
-       return quickSort(s_nums) + e_nums + quickSort(m_nums)
 
-# bubbleSort(nums)
+def quick_sort(values):
+    if len(values) <= 1:
+        return values
+    else:
+        q = random.choice(values)
+        s_nums = []
+        m_nums = []
+        e_nums = []
+        for n in values:
+            if n < q:
+                s_nums.append(n)
+            elif n > q:
+                m_nums.append(n)
+            else:
+                e_nums.append(n)
+        return quick_sort(s_nums) + e_nums + quick_sort(m_nums)
+
+
+# bubble_sort(numbers)
+
+timeThis(quick_sort)(numbers)
 
 start = time.time()
-# nums = quickSort(nums)
-nums.sort()
+numbers.sort()
 end = time.time()
 print(end-start)
-print(nums)
+
+# print(numbers)

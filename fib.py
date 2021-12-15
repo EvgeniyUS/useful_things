@@ -10,12 +10,6 @@ def fib(n):
         num += 1
     return b
 
-#N = 1
-#e = 1000000
-# while N <= e:
-#  fib(N)
-#  N *= 10
-
 
 @timeThis
 def fib2(n):

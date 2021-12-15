@@ -1,23 +1,10 @@
 # Написать функцию flatten, которая принимает список и возвращает указанный в примере результат. 
 
+from timeThis import timeThis
+
+
 data = [1, [2, 3], 4, 4, [5, [6], 7], 8]
-# Результат:     1, 2, 3, 4, 4, 5, 6, 7, 8,
-
-from timeit import timeit
-import time
-from functools import wraps
-
-
-def timeThis(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        start = time.time()
-        result = func(*args, **kwargs)
-        end = time.time()
-        print('Function: {}\nExecution time: {} sec'.format(
-            func.__name__, end-start))
-        return result
-    return wrapper
+result = [1, 2, 3, 4, 4, 5, 6, 7, 8]
 
 
 def flatten(d: list) -> list:
@@ -28,13 +15,6 @@ def flatten(d: list) -> list:
         elif isinstance(i, list):
                 l += flatten(i)
     return l
-
-
-@timeThis
-def test(d):
-    print(flatten(d))
-
-test(data)
 
 
 def gen_flatten(d: list) -> list:
@@ -51,12 +31,6 @@ def gen_flatten(d: list) -> list:
         pass
     return l
 
-@timeThis
-def test2(d):
-    print(gen_flatten(d))
-
-test2(data)
-
 
 def gen_flatten2(d: list):
     for i in d:
@@ -66,9 +40,11 @@ def gen_flatten2(d: list):
             yield i
 
 
-@timeThis
-def test2(d):
-    print(list(gen_flatten2(d)))
+def gen2(d):
+    return list(gen_flatten2(d))
 
-test2(data)
 
+assert timeThis(flatten)(data) == result
+assert timeThis(gen_flatten)(data) == result
+# assert timeThis(gen2)(data) == result
+assert list(timeThis(gen_flatten2)(data)) == result

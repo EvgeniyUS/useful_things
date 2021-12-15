@@ -12,13 +12,13 @@ class ValidatorXML(object):
             inXML = sys.argv[1]
             try:
                 tree = etree.parse(inXML, self.parser)
-                print '[VALID]'
+                print('[VALID]')
                 return tree
-            except Exception, exp:
-                print '[NOT valid]\nError:', exp
+            except Exception as e:
+                print('[NOT valid]\nError:', str(e))
                 return False
         else:
-            print 'Error: enter xml file name'
+            print('Error: enter xml file name')
 
 
 V = ValidatorXML()

@@ -1,42 +1,5 @@
 from xml.etree import ElementTree as ET
-from pprint import pprint
-from random import randint
-
-def xml_to_dict(XML=None):
-    """
-    xml (str) to dict magic
-    """
-    
-    root = ET.fromstring(XML)
-
-    def rec(node):
-        tag_dict = dict()
-        node_text = node.text.strip() if type(node.text) == str else ''
-        if node_text:
-            tag_dict['text_value'] = node_text
-        #if node.attrib:
-        #    tag_dict = dict()
-        #    for attr, value in node.attrib.items():
-        #        try:
-        #            tag_dict[attr] = int(value)
-        #        except ValueError:
-        #            tag_dict[attr] = value
-        #num = 0
-        for child in node:
-            try:
-                tag_dict[child.tag].append(rec(child))
-            except KeyError:
-                tag_dict[child.tag] = rec(child)
-            except AttributeError:
-                if type(tag_dict[child.tag]) == dict:
-                    tag_dict[child.tag] = [tag_dict[child.tag], rec(child)]
-                else:
-                    tag_dict[child.tag+'_tag_{}'.format(num)] = rec(child)
-                    num += 1
-        return tag_dict
-
-    pprint({root.tag: rec(root)})
-
+from timeThis import timeThis
 
 XML = """
 <domain type='kvm' id='1'>
@@ -169,6 +132,85 @@ XML = """
     <imagelabel>+931:+931</imagelabel>
   </seclabel>
 </domain>
-
 """
+
+
+@timeThis
+def xml_to_dict(xml_str):
+    """
+    XML (str) to dict magic
+    Просто раскладывает по ключам:
+        аттрибуты в attrib,
+        текстовое значение в text_value,
+        список детишек в children (даже если ребенок один)
+    """
+
+    def rec(node):
+        node_dict = dict()
+        node_dict[node.tag] = dict(attrib=node.attrib,
+                                   text_value=node.text.strip() if isinstance(node.text, str) else '',
+                                   children=list())
+        for child in node:
+            node_dict[node.tag]['children'].append(rec(child))
+        return node_dict
+
+    try:
+        root = ET.fromstring(xml_str)
+    except Exception:
+        return {}
+
+    return rec(root)
+
+
+@timeThis
+def xml_to_dict2(xml_str):
+    """
+    XML (str) to dict magic
+    Упрощенная структура, без суррогатных ключей типа attrib и children.
+    Аттрибуты и вложенные теги (детишки) находятся на одном уровне для каждого тега.
+    Только повторяющиеся теги (детишки) собираются в список.
+    По идее такой структурой будет удобней пользоваться - меньше итераций по спискам одинаковых тег.
+    Один нюанс: если название аттрибута и вложенного тега совпадут, то название тега
+    будет изменено на <имя_тега>_tag_<порядковый_номер> что бы не превратить значение аттрибута в
+    список значений.
+    """
+
+    def rec(node):
+        tag_dict = dict()
+        node_text = node.text.strip() if isinstance(node.text, str) else ''
+        if node_text:
+            try:
+                tag_dict['_text_'] = int(node_text)
+            except ValueError:
+                tag_dict['_text_'] = node_text
+        if node.attrib:
+            for attr, value in node.attrib.items():
+                try:
+                    tag_dict[attr] = int(value)
+                except ValueError:
+                    tag_dict[attr] = value
+        num = 1
+        for child in node:
+            try:
+                tag_dict[child.tag].append(rec(child))
+            except KeyError:
+                tag_dict[child.tag] = rec(child)
+            except AttributeError:
+                if isinstance(tag_dict[child.tag], dict):
+                    tag_dict[child.tag] = [tag_dict[child.tag], rec(child)]
+                else:
+                    tag_dict[child.tag + '_tag_{}'.format(num)] = rec(child)
+                    num += 1
+        return tag_dict
+
+    try:
+        one_line_xml_str = ' '.join(xml_str.split())
+        root = ET.fromstring(one_line_xml_str)
+    except Exception:
+        return {}
+
+    return {root.tag: rec(root)}
+
+
 xml_to_dict(XML)
+xml_to_dict2(XML)
