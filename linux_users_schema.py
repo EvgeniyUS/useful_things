@@ -1,5 +1,7 @@
 import subprocess
 from pprint import pprint
+
+
 data = {}
 for i in subprocess.check_output(['cat', '/etc/shadow']).decode('utf-8').strip().split('\n'):
     user_list = i.split(':')
@@ -8,6 +10,7 @@ for i in subprocess.check_output(['cat', '/etc/shadow']).decode('utf-8').strip()
     for group in user_groups:
         group_id, group_name = group.strip(')').split('(')
         data[user_list[0]][group_name] = group_id
+
 
 pprint(data)
 
